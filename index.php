@@ -8,6 +8,7 @@
 	<link id="browser_favicon" rel="shortcut icon" href="blogadmin/images/<?php geticon("titles"); ?>">
 	<meta charset="utf-8" name="description" content="<?php getshortdescription("titles");?>">
 	<meta name="keywords" content="<?php getkeywords("titles");?>" />
+	<meta name="google-adsense-account" content="ca-pub-2909607509159852">
 	<script>
 		addEventListener("load", function () {
 			setTimeout(hideURLbar, 0);
