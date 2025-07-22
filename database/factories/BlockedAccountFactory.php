@@ -11,7 +11,7 @@ class BlockedAccountFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'twitter_account_id' => fake()->unique()->numerify('##########'),
+            'x_account_id' => fake()->unique()->numerify('##########'),
             'username' => fake()->userName(),
             'category' => fake()->randomElement(['porn', 'hate_speech', 'propaganda', 'scam', 'other']),
             'reason' => fake()->sentence(),

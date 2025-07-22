@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
         $users = User::all();
         $categories = ['porn', 'hate_speech', 'propaganda', 'scam', 'other'];
         
-        // Sample Twitter accounts to block
-        $twitterAccounts = [
+        // Sample X accounts to block
+        $xAccounts = [
             ['id' => '123456', 'username' => 'spammer1'],
             ['id' => '234567', 'username' => 'hatespeech1'],
             ['id' => '345678', 'username' => 'propaganda1'],
@@ -44,13 +44,13 @@ class DatabaseSeeder extends Seeder
         ];
 
         // Create multiple blocks for each account to generate meaningful statistics
-        foreach ($twitterAccounts as $account) {
+        foreach ($xAccounts as $account) {
             // Each account will be blocked by different users (but only once per user)
             $selectedUsers = $users->random(min(count($users), rand(5, 15)));
             foreach ($selectedUsers as $user) {
                 BlockedAccount::create([
                     'user_id' => $user->id,
-                    'twitter_account_id' => $account['id'],
+                    'x_account_id' => $account['id'],
                     'username' => $account['username'],
                     'category' => $categories[array_rand($categories)],
                     'reason' => fake()->sentence(),
@@ -58,14 +58,14 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Create some additional random blocks with unique user-twitter_account combinations
+        // Create some additional random blocks with unique user-x_account combinations
         foreach (range(1, 50) as $index) {
             $user = $users->random();
-            $uniqueTwitterId = fake()->unique()->numerify('#######');
+            $uniqueXId = fake()->unique()->numerify('#######');
             BlockedAccount::create([
                 'user_id' => $user->id,
-                'twitter_account_id' => $uniqueTwitterId,
-                'username' => 'random_user_' . $uniqueTwitterId,
+                'x_account_id' => $uniqueXId,
+                'username' => 'random_user_' . $uniqueXId,
                 'category' => $categories[array_rand($categories)],
                 'reason' => fake()->sentence(),
             ]);

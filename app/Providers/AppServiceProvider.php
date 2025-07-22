@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Auto-register components in the components directory
+        $this->loadViewComponentsAs('', [
+            \App\View\Components\Header::class,
+            \App\View\Components\Footer::class,
+            \App\View\Components\DarkModeToggle::class,
+        ]);
     }
 }
