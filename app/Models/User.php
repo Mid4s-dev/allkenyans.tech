@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'google_id',
+        'avatar',
     ];
 
     /**
@@ -43,6 +45,17 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
+    }
+
+    public function blockedAccounts()
+    {
+        return $this->hasMany(BlockedAccount::class);
+    }
+
+    public function reportedAccounts()
+    {
+        return $this->hasMany(ReportedAccount::class, 'reporter_id');
     }
 }

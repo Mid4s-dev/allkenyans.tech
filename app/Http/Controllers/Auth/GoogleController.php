@@ -4,34 +4,38 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Exception;
 
 class GoogleController extends Controller
 {
-    public function redirect(): RedirectResponse
+    public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
 
-    public function callback(): RedirectResponse
+    public function handleGoogleCallback()
     {
         try {
             $googleUser = Socialite::driver('google')->user();
-            
-            $user = User::updateOrCreate(
-                ['email' => $googleUser->email],
-                [
+            $user = User::where('google_id', $googleUser->id)->first();
+
+            if (!$user) {
+                $user = User::create([
                     'name' => $googleUser->name,
+                    'email' => $googleUser->email,
                     'google_id' => $googleUser->id,
-                ]
-            );
+                    'password' => bcrypt(uniqid()),
+                ]);
+            }
 
-            auth()->login($user);
+            Auth::login($user);
+            return redirect()->route('home')->with('success', 'Successfully logged in with Google!');
 
-            return redirect()->intended('/dashboard/blocked');
-        } catch (\Exception $e) {
-            return redirect('/login')->with('error', 'Google authentication failed');
+        } catch (Exception $e) {
+            return redirect()->route('login')->with('error', 'Something went wrong with Google login.');
         }
     }
 }
